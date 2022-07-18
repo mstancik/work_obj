@@ -30,7 +30,7 @@
 #define WRN_RANO_NEDOST_NADOBA -2  // varovanie: mala sa spustit rano zavlaha ale nadoba nemala ani 50%
 #define WRN_ZAVL_PRAZDNA_NADOBA -3  // varovanie: pri zavlazovani sa vyprazdnila nadoba 
 
-#define AKTUALNY_CAS_V_SEKUNDACH second() + minute() * 60 + hour() * 3600
+#define AKTUALNY_CAS_V_SEKUNDACH (long)second() + ((long)minute() * 60) + ((long)hour() * 3600);
 
 // ***** globals *****
 
@@ -220,7 +220,6 @@ void loop() {
 
     // management nadoby a cerpadla v studni
     //gPercentoNaplnenia = percentoNaplnenia();
-    
     gCStudna.Update(gZavlaha);
     if (gZavlaha > 0)
         gCStudna.Vypni();
