@@ -2,9 +2,10 @@
 // verzie
 //
 // 2022-07-18 nova objektova verzia
+// 2022-07-31 sekundu po polnoci sa posledne casy oddychu a cerpania vynuluju
 
 
-#define VERSION 20220718
+#define VERSION 20220731
 
 #include <TimeLib.h>
 #include <LiquidCrystal.h>
@@ -48,7 +49,7 @@ int zavlahaRano[2] = {06, 00}; // cas rannej zavlahy
 int gCasZavlahy[6]; // casy pri ktorych sa prepne dalsia sekcia pri mode 1
 int gValueMin, gValueMax;
 int gMode = 1;  // mod zavlahy 0 - nepolievaj, 1 - iba vecer, 2 - vecer aj rano
-int gZostavajuciCasNaplnania = 30;   // cas v minutach kolko sa bude naplnat nadoba, zvoli sa pri spustani
+int gZostavajuciCasNaplnania = 50;   // cas v minutach kolko sa bude naplnat nadoba, zvoli sa pri spustani
 int lZostavajuciCasNaplnania;   // aktualny celkovy cas v sekundach kolko sa bude naplnat nadoba
 
 // ************** classes definition CerpadloStudna **************
@@ -109,6 +110,11 @@ void CerpadloStudna::Init(){
 void CerpadloStudna::Update(int zavlaha){
   long aktualny_cas_v_sekundach = AKTUALNY_CAS_V_SEKUNDACH;
   long studna_doba_behu = STUDNA_DOBA_BEHU;
+
+  if (aktualny_cas_v_sekundach == 1){
+      posledneZapnutie = 0;
+      posledneVypnutie = 0;
+      }
 
   // ak sa uz zohrieva tepelna prudova poistka treba vypnut
   if (zapnute && (zavlaha > 0 || !mamVodu || (aktualny_cas_v_sekundach - posledneZapnutie >= studna_doba_behu))){
